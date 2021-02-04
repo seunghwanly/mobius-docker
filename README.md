@@ -1,8 +1,23 @@
-# mobius-docker
+# 😀 Mobius-docker
+
+## Notion
+<em><b>02.03.21 done for parsing</b></em><br/>
+<em><b>TODO : load to Database</b></em>
+
+<p align="center">
+    <a href="#version">Version</a> •
+    <a href="#summary">Summary</a> •
+    <a href="#requirements">Requirements</a> •
+    <a href="#usage">Usage</a>
+</p>
+
+## Version
+* mobius-2.4.36
+* nCube-thyme-2.3.2
 
 ## Summary
 <p align='center'>
-<img src='https://user-images.githubusercontent.com/22142225/106721084-8b41f980-6647-11eb-8d60-5c4921b38eb2.png' width='400' />
+<img src='https://user-images.githubusercontent.com/22142225/106721084-8b41f980-6647-11eb-8d60-5c4921b38eb2.png' width='800' />
 </p>
 
 ## Requirements
@@ -28,7 +43,11 @@ $ cd mobius
 ```terminal
 $ npm install
 ````
-4. Run concurrently : mobius, nCube, mosquitto
+4. Check MySQL running
+```terminal
+$ mysql.server start
+```
+5. Run concurrently : mobius, nCube, mosquitto
 ```terminal
 $ npm run dev
 ```
