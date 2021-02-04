@@ -62,7 +62,7 @@ function http_request(path, method, ty, bodyString, callback) {
         //res.setEncoding('utf8');
 
         res.on('data', function (chunk) {
-            res_body += chunk;
+            res_body += chunk;            
         });
 
         res.on('end', function () {
@@ -94,9 +94,10 @@ function http_request(path, method, ty, bodyString, callback) {
                 });
             }
             else {
+                console.log('[ res_body ]=================================================\n' + res_body === null ? 'null' : res_body + "\n=================================================");
                 try {
                     var jsonObj = JSON.parse(res_body);
-                    callback(res, jsonObj);
+                    callback(res, jsonObj);                    
                 }
                 catch (e) {
                     console.log('[http_adn] json parse error]');
@@ -112,9 +113,9 @@ function http_request(path, method, ty, bodyString, callback) {
         console.log('problem with request: ' + e.message);
     });
 
-    //console.log(bodyString);
+    console.log('[ body string ] >> \n'+bodyString + '\n=============================================');
 
-    console.log(path);
+    console.log('[ path ] >> \n'+path + '\n=============================================');
 
     req.write(bodyString);
     req.end();

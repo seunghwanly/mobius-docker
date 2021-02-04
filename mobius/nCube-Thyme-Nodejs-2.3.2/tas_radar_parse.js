@@ -1,4 +1,7 @@
-exports.parseDataFromRadar = (data) => {
+const conf = require("./conf");
+const { crtci } = require("./http_adn");
+
+exports.parseDataFromRadar = (data, socket) => {
     // added : 레이더 센서 데이터 체크
 
     // 받은 데이터 
@@ -24,7 +27,7 @@ exports.parseDataFromRadar = (data) => {
         crc: ''
     };
     // let _buffer = Buffer.from(data);
-    
+
     // parse buffer
     dataJson.cmd = data.substring(4, 6);
     dataJson.serial = data.substring(6, 22);
@@ -101,7 +104,7 @@ exports.parseDataFromRadar = (data) => {
 
     // * reserved ------------------------------------------------------------------
     parsedJson.reserved = dataJson.reserved;
-    
+
     // * length ------------------------------------------------------------------
     parsedJson.length = parseByteToInt(dataJson.length, 2);
 
@@ -369,6 +372,22 @@ exports.parseDataFromRadar = (data) => {
     // check output
     console.log(JSON.stringify(parsedJson));
 
+    // db upload 
+    const ctname = 'radar';
+
+    for (let i = 0; i < conf.cnt.length; ++i) {
+        if (conf.cnt[i].name === ctname) {
+            let parent = conf.cnt[i].parent + '/' + conf.cnt[i].name;
+            crtci(parent, i, parsedJson, socket, function (status, res_body, to, socket) {
+                var result = {};
+                result.ctname = ctname;
+                result.con = status;
+
+                console.log('<---- x-m2m-rsc : ' + status + ' <----');
+            });
+        }
+    }
+
     // TODO : 받은 데이터 중 뭔지 모르겠는 값
     // 7b2263746e616d65223a226c6564222c22636f6e223a2268656c6c6f227d3c454f463e
 }
@@ -379,7 +398,7 @@ function parseByteToInt(str, byte) {
     // into little Endian
     for (let i = 0; i < byte; ++i) {
         littleEndian.push(str.substring(i * 2, (i * 2) + 2));
-    }    
+    }
     // change into Big Endian
     littleEndian.reverse();
 

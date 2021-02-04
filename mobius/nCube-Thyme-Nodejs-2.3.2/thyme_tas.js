@@ -16,7 +16,7 @@
 var net = require('net');
 var ip = require('ip');
 const conf = require('./conf');
-const { parseDataFromRadar } = require('./tas_sample/tas_radar/tas_data_parse');
+const { parseDataFromRadar } = require('./tas_radar_parse');
 
 var socket_arr = {};
 exports.socket_arr = socket_arr;
@@ -59,9 +59,9 @@ exports.ready = function tas_ready() {
             socket.setEncoding('hex');
             // socket (Client) ------------> nCube (Host)
             // led, co2, ...
-            //socket.on('data', tas_handler);
+            // socket.on('data', tas_handler);
             // radar
-            socket.on('data', parseDataFromRadar);
+            socket.on('data', (data) => parseDataFromRadar(data, socket));
             // socket end
             socket.on('end', () => console.log('end'));
 
@@ -88,6 +88,7 @@ function tas_handler(data) {
             var line = data_arr[i];
             tas_buffer[this.id] = tas_buffer[this.id].replace(line + '<EOF>', '');
             var jsonObj = JSON.parse(line);
+            console.log('jsonObj >>>\n' + JSON.stringify(jsonObj));
             var ctname = jsonObj.ctname;
             var content = jsonObj.con;
 
