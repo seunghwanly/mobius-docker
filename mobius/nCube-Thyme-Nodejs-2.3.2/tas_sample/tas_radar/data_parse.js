@@ -368,8 +368,9 @@ exports.parseRadarData = (data) => {
     parsedJson.crc = dataJson.crc;
 
     // check output
-    console.log(JSON.stringify(parsedJson));
+    console.log(parsedJson);
     // TODO : DATABASE upload
+    return parsedJson;
     // TODO : 받은 데이터 중 뭔지 모르겠는 값
     // 7b2263746e616d65223a226c6564222c22636f6e223a2268656c6c6f227d3c454f463e
 }

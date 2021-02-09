@@ -56,12 +56,12 @@ exports.ready = function tas_ready() {
             
             // ** added : 020321 Wed. by seunghwanly
             // added : socket encoding
-            socket.setEncoding('hex');
+            //socket.setEncoding('hex');
             // socket (Client) ------------> nCube (Host)
             // led, co2, ...
-            // socket.on('data', tas_handler);
+            socket.on('data', tas_handler);
             // radar
-            socket.on('data', (data) => parseDataFromRadar(data, socket));
+            //socket.on('data', (data) => parseDataFromRadar(data, socket));
             // socket end
             socket.on('end', () => console.log('end'));
 

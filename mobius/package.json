@@ -10,8 +10,9 @@
     "start": "npm run dev",
     "mobius": "cd mobius-2.4.36 && node mobius.js",
     "thyme": "cd nCube-Thyme-Nodejs-2.3.2 && node thyme.js",
+    "tas": "cd nCube-Thyme-Nodejs-2.3.2/tas_sample/tas_radar && nodemon index.js",
     "mosquitto": "brew services start mosquitto",
-    "dev": "concurrently  \"npm run mosquitto\" \"npm run mobius\"  \"npm run thyme\""
+    "dev": "concurrently  \"npm run mosquitto\" \"npm run mobius\" \"npm run thyme\" \"npm run tas\""
   },
   "author": "Seunghwan Lee",
   "license": "ISC",
