@@ -43,11 +43,50 @@ $ cd mobius
 ```terminal
 $ npm install
 ````
-4. Check MySQL running
+4. create conf.json file in mobius-2.4.36
+```json
+{
+    "csebase": "onem2m",
+    "cseid": "/onem2m",
+    "csebaseport": "7579",
+    "csetype": "in",
+    "dbhost": "localhost",
+    "dbuser": "root",
+    "dbpass": !MySQL PASSWORD!, 
+    "dbname": "mobiusdb", 
+    "superadm_usr": "superadmin",
+    "superadm_pwd": "f7c6c12d",
+    "pxymqttport": 7580,
+    "pxycoapport": 5683,
+    "pxywsport": 7577,
+    "tsagentport": 7582,
+    "mqttbroker": "localhost",
+    "secure": "disable",
+    "authorization": true,
+    "logDir": "./log"  
+ }
+ 
+```
+5. import database mysqldb.sql
+```terminal
+$ mysql -u root -p
+```
+> create and import database
+```terminal
+mysql> CREATE DATABASE mobiusdb;
+mysql> USE mobiusdb;
+mysql> SOURCE "path";   // mobius-2.4.36/mobius/mobiusdb.sql path
+mysql> SHOW DATABASES;  // check database has created
+```
+> simple import, if database already exist
+```terminal
+$ mysql -u root -p mobiusdb < ~/mobius-2.4.36/mobius/mobiusdb.sql
+```
+6. Check MySQL running
 ```terminal
 $ mysql.server start
 ```
-5. Run concurrently : mobius, nCube, mosquitto
+7. Run concurrently : mobius, nCube, mosquitto
 ```terminal
 $ npm run dev
 ```
