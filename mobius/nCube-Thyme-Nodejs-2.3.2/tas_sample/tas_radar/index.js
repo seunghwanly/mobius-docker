@@ -24,7 +24,7 @@ const tasReady = () => {
             socket.setEncoding('hex');
 
             // socket를 on data 에 같이 넣어줘서 작업?
-            socket.on('data', (data) => tasHandler);
+            socket.on('data', tasHandler);
             // end
             socket.on('end', () => console.log('[ socket end ]'));
             // close
