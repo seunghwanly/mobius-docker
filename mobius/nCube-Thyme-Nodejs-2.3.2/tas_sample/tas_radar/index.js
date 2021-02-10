@@ -6,9 +6,9 @@
 // server
 var net = require('net');
 var ip = require('ip');
-const port = 3333;
-const { parseRadarData } = require('./data_parse');
-const { sendThyme } = require('./tas_thyme');
+
+// using dot env
+require('dotenv').confing();
 
 var _server = null;
 
@@ -20,7 +20,7 @@ const tasReady = () => {
 
             // to thyme
             var net = require('net');
-            var asClient = net.connect({ port: 3105 });
+            var asClient = net.connect({ port: process.env.ST_PORT });
 
             // socket encoding
             socket.setEncoding('hex');
@@ -35,7 +35,7 @@ const tasReady = () => {
             socket.on('error', (err) => console.error('**ERROR**\n>> : ' + err));
         })
 
-        _server.listen(port, () => console.info('TCP SERVER listening on :' + ip.address() + ":" + port.toString()));
+        _server.listen(process.env.RS_PORT, () => console.info('TCP SERVER listening on :' + ip.address() + ":" + port.toString()));
     }
 }
 
@@ -44,19 +44,17 @@ const tasHandler = (data, client) => {
 
     if (data === null) {
         // socket keep alive only for data is null !
-        socket.setKeepAlive(true, 5000);
+        client.setKeepAlive(true, 5000);
     }
     // send to thyme
     client.on('connect', () => {
-        console.log('3333 -------> 3105');
-        // var cin = {ctname: 'radar', con: parseRadarData(data)};
-
         // data -> trash
         if (data.toString().substring(0, 4) !== 'ffff') {
-            var send = JSON.stringify(parseRadarData(data)).replace(/"([^"]+)":/g, '$1:');
+            // not working with parsed data ...
+            // var send = JSON.stringify(parseRadarData(data)).replace(/"([^"]+)":/g, '$1:');
+            // client.write(JSON.stringify(cin).replace(/\\"/g, "'") + '<EOF>');
                         
             var cin = { ctname: 'radar', con: data };
-            // client.write(JSON.stringify(cin).replace(/\\"/g, "'") + '<EOF>');
             
             client.write(JSON.stringify(cin) + '<EOF>');
         }
