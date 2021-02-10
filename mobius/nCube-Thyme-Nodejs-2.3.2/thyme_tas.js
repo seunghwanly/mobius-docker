@@ -54,14 +54,8 @@ exports.ready = function tas_ready() {
             socket.id = Math.random() * 1000;
             tas_buffer[socket.id] = '';
             
-            // ** added : 020321 Wed. by seunghwanly
-            // added : socket encoding
-            //socket.setEncoding('hex');
-            // socket (Client) ------------> nCube (Host)
-            // led, co2, ...
             socket.on('data', tas_handler);
-            // radar
-            //socket.on('data', (data) => parseDataFromRadar(data, socket));
+            
             // socket end
             socket.on('end', () => console.log('end'));
 
@@ -88,7 +82,6 @@ function tas_handler(data) {
             var line = data_arr[i];
             tas_buffer[this.id] = tas_buffer[this.id].replace(line + '<EOF>', '');
             var jsonObj = JSON.parse(line);
-            console.log('jsonObj >>>\n' + JSON.stringify(jsonObj));
             var ctname = jsonObj.ctname;
             var content = jsonObj.con;
 

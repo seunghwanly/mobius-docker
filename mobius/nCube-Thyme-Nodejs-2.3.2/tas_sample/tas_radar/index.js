@@ -17,10 +17,10 @@ const tasReady = () => {
         // create server
         _server = new net.createServer((socket) => {
             console.log('[ socket connected ]');
-            
+
             // to thyme
             var net = require('net');
-            var asClient = net.connect({port: 3105});
+            var asClient = net.connect({ port: 3105 });
 
             // socket encoding
             socket.setEncoding('hex');
@@ -50,9 +50,19 @@ const tasHandler = (data, client) => {
     client.on('connect', () => {
         console.log('3333 -------> 3105');
         // var cin = {ctname: 'radar', con: parseRadarData(data)};
-        var cin = {ctname: 'radar', con: data};
-        client.write(JSON.stringify(cin)+ '<EOF>');
+
+        // data -> trash
+        if (data.toString().substring(0, 4) !== 'ffff') {
+            var send = JSON.stringify(parseRadarData(data)).replace(/"([^"]+)":/g, '$1:');
+                        
+            var cin = { ctname: 'radar', con: data };
+            // client.write(JSON.stringify(cin).replace(/\\"/g, "'") + '<EOF>');
+            
+            client.write(JSON.stringify(cin) + '<EOF>');
+        }
     });
+    client.on('error', (err) => console.error(err));
+    client.on('close', () => client.destroy());
 }
 // tas ready !!!
 tasReady();

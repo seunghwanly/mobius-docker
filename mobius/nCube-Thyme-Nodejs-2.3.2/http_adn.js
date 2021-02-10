@@ -94,13 +94,13 @@ function http_request(path, method, ty, bodyString, callback) {
                 });
             }
             else {
-                console.log('[ res_body ]=================================================\n' + res_body === null ? 'null' : res_body + "\n=================================================");
+                // console.log('[ res_body ]=================================================\n' + res_body + "\n=================================================");
                 try {
                     var jsonObj = JSON.parse(res_body);
                     callback(res, jsonObj);                    
                 }
                 catch (e) {
-                    console.log('[http_adn] json parse error]');
+                    console.error('[http_adn] json parse error]' + e);
                     var jsonObj = {};
                     jsonObj.dbg = res_body;
                     callback(res, jsonObj);
@@ -113,9 +113,9 @@ function http_request(path, method, ty, bodyString, callback) {
         console.log('problem with request: ' + e.message);
     });
 
-    console.log('[ body string ] >> \n'+bodyString + '\n=============================================');
+    // console.log('[ body string ] >> \n'+bodyString + '\n=============================================');
 
-    console.log('[ path ] >> \n'+path + '\n=============================================');
+    // console.log('[ path ] >> \n'+path + '\n=============================================');
 
     req.write(bodyString);
     req.end();
