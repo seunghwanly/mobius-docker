@@ -1,5 +1,5 @@
 
-exports.parseRadarData = (data) => {
+exports.parseRadar = (data) => {
     // added : 레이더 센서 데이터 체크
 
     // 받은 데이터 
@@ -41,39 +41,39 @@ exports.parseRadarData = (data) => {
     switch (dataJson.cmd) {
         case "00":
             parsedCMD = 'Response OK';
-            console.log('DEVICE ----------> HOST');
+            //console.log('DEVICE ----------> HOST');
             break;
         case "01":
             parsedCMD = 'Response Error';
-            console.log('DEVICE ----------> HOST');
+            //console.log('DEVICE ----------> HOST');
             break;
         case "10":
             parsedCMD = 'Response Result';
-            console.log('DEVICE ----------> HOST');
+            //console.log('DEVICE ----------> HOST');
             break;
         case "11":
             parsedCMD = 'Response Control';
-            console.log('DEVICE <---------- HOST');
+            //console.log('DEVICE <---------- HOST');
             break;
         case "12":
             parsedCMD = 'Response Status';
-            console.log('DEVICE ----------> HOST');
+            //console.log('DEVICE ----------> HOST');
             break;
         case "21":
             parsedCMD = 'Wifi Control';
-            console.log('DEVICE <---------- HOST');
+            //console.log('DEVICE <---------- HOST');
             break;
         case "22":
             parsedCMD = 'Wifi Status';
-            console.log('DEVICE ----------> HOST');
+            //console.log('DEVICE ----------> HOST');
             break;
         case "30":
             parsedCMD = 'send .BIN';
-            console.log('RADAR <---------- Wifi');
+            //console.log('RADAR <---------- Wifi');
             break;
         case "31":
             parsedCMD = 'FOTA Information';
-            console.log('DEVICE <---------- HOST');
+            //console.log('DEVICE <---------- HOST');
             break;
     }
     parsedJson.cmd = parsedCMD;
