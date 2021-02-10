@@ -71,9 +71,12 @@ const program = async () => {
             var prmEng = [eng, timeStamp];
 
             grafanaConn.query(sqlPos, prmPos, (e) => e ? console.log(e) : console.log('insert_pos'));
-            grafanaConn.query(sqlBpm, prmBpm, (e) => e ? console.log(e) : console.log('insert_bpm'));
-            grafanaConn.query(sqlHbr, prmHbr, (e) => e ? console.log(e) : console.log('insert_hbr'));
-            grafanaConn.query(sqlEng, prmEng, (e) => e ? console.log(e) : console.log('insert_eng'));
+            if(bpm !== NaN)
+                grafanaConn.query(sqlBpm, prmBpm, (e) => e ? console.log(e) : console.log('insert_bpm'));
+            if(hbr !== NaN)
+                grafanaConn.query(sqlHbr, prmHbr, (e) => e ? console.log(e) : console.log('insert_hbr'));
+            if(eng !== NaN)
+                grafanaConn.query(sqlEng, prmEng, (e) => e ? console.log(e) : console.log('insert_eng'));
         },
     });
 
