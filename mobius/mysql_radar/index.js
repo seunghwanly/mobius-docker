@@ -2,9 +2,14 @@ const mysql = require('mysql');
 const MySQLEvents = require('@rodrigogs/mysql-events');
 
 const { parseRadar } = require('./parse');
-
 require('dotenv').config();
 
+// save in grafana
+var grafanaConfig = require(__dirname + '/connection.js');
+var grafanaConn = grafanaConfig.init();
+grafanaConfig.connect(grafanaConn);
+
+// realtime mysql → mobiusdb
 const program = async () => {
     const connection = mysql.createConnection({
         host: 'localhost',
@@ -25,12 +30,12 @@ const program = async () => {
         name: 'monitoring . . .',
         expression: 'mobiusdb.cin',
         statement: MySQLEvents.STATEMENTS.ALL,
-        onEvent: (event) => { // You will receive the events here
-            // console.log(event);
-            // console.log(event.timestamp + '\t' + JSON.stringify(event.affectedRows[0].after.con));
-            var timeStamp = event.timestamp;
+        onEvent: (event) => { 
+
+            // these are for grafana
+            var timeStamp = parseInt(event.timestamp);
             var msg = event.affectedRows[0].after.con;
-            // console.log(timeStamp, msg);
+            
 
             var jsonObject = parseRadar(msg.toString());
             // pos
@@ -47,6 +52,28 @@ const program = async () => {
             var eng = jsonObject.message.content !== null ? jsonObject.message.content.energy : null;
 
             console.log(timeStamp + ' : ' + JSON.stringify(pos), bpm, hbr, eng);
+
+            // save to grafana
+            // pos
+            var sqlPos = 'INSERT INTO pos (pos_x, pos_y, pos_z, time) VALUES (?, ?, ?, ?)';
+            var prmPos = [pos.x, pos.y, pos.z, timeStamp];
+
+            // bpm
+            var sqlBpm = 'INSERT INTO bpm (val, time) VALUES (?, ?)';
+            var prmBpm = [bpm, timeStamp];
+
+            // hbr
+            var sqlHbr = 'INSERT INTO hbr (val, time) VALUES (?, ?)';
+            var prmHbr = [hbr, timeStamp];
+
+            // energy
+            var sqlEng = 'INSERT INTO energy (val, time) VALUES (?, ?)';
+            var prmEng = [eng, timeStamp];
+
+            grafanaConn.query(sqlPos, prmPos, (e) => e ? console.log(e) : console.log('insert_pos'));
+            grafanaConn.query(sqlBpm, prmBpm, (e) => e ? console.log(e) : console.log('insert_bpm'));
+            grafanaConn.query(sqlHbr, prmHbr, (e) => e ? console.log(e) : console.log('insert_hbr'));
+            grafanaConn.query(sqlEng, prmEng, (e) => e ? console.log(e) : console.log('insert_eng'));
         },
     });
 

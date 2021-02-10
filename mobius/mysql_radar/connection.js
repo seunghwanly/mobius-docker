@@ -7,7 +7,7 @@ var connectionInfo = {
     host: 'localhost',
     user: 'root',
     password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
+    database: 'grafana',
     port: process.env.DB_PORT
 };
 
