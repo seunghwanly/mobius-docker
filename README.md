@@ -1,5 +1,8 @@
 # 😀 Mobius-docker
 
+## Guideline in KOREAN
+<a href="https://www.notion.so/RADAR-b702435f5bfb44ecb511a7ad1fb87d15">**Go to Link😀**</a>
+
 ## Notion
 <em><b>02.03.21 done for parsing</b></em><br/>
 <em><b>TODO : load to Database</b></em>
