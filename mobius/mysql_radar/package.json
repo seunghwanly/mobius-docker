@@ -12,6 +12,7 @@
   "author": "Seunghwan Lee",
   "license": "ISC",
   "dependencies": {
+    "@rodrigogs/mysql-events": "^0.6.0",
     "body-parser": "^1.18.3",
     "dotenv": "^8.2.0",
     "express": "^4.16.4",

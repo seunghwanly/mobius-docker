@@ -8,7 +8,7 @@ var net = require('net');
 var ip = require('ip');
 
 // using dot env
-require('dotenv').confing();
+require('dotenv').config();
 
 var _server = null;
 
@@ -35,7 +35,7 @@ const tasReady = () => {
             socket.on('error', (err) => console.error('**ERROR**\n>> : ' + err));
         })
 
-        _server.listen(process.env.RS_PORT, () => console.info('TCP SERVER listening on :' + ip.address() + ":" + port.toString()));
+        _server.listen(process.env.RS_PORT, () => console.info('TCP SERVER listening on :' + ip.address() + ":" + process.env.RS_PORT));
     }
 }
 
