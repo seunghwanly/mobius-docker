@@ -16,14 +16,17 @@ const tasReady = () => {
     if (_server === null) {
         // create server
         _server = new net.createServer((socket) => {
-
             console.log('[ socket connected ]');
+            
+            // to thyme
+            var net = require('net');
+            var asClient = net.connect({port: 3105});
 
             // socket encoding
             socket.setEncoding('hex');
 
             // socket를 on data 에 같이 넣어줘서 작업?
-            socket.on('data', (data) => tasHandler(data, socket));
+            socket.on('data', (data) => tasHandler(data, asClient));
             // end
             socket.on('end', (data) => console.log('[ socket end with data : ' + data + ']'));
             // close
@@ -36,15 +39,20 @@ const tasReady = () => {
     }
 }
 
-const tasHandler = (data, socket) => {
+const tasHandler = (data, client) => {
     // parseRadarData(data);
 
     if (data === null) {
         // socket keep alive only for data is null !
         socket.setKeepAlive(true, 5000);
     }
-    
-    sendThyme(parseRadarData(data));
+    // send to thyme
+    client.on('connect', () => {
+        console.log('3333 -------> 3105');
+        // var cin = {ctname: 'radar', con: parseRadarData(data)};
+        var cin = {ctname: 'radar', con: data};
+        client.write(JSON.stringify(cin)+ '<EOF>');
+    });
 }
 // tas ready !!!
 tasReady();
