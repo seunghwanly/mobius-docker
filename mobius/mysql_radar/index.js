@@ -30,12 +30,12 @@ const program = async () => {
         name: 'monitoring . . .',
         expression: 'mobiusdb.cin',
         statement: MySQLEvents.STATEMENTS.ALL,
-        onEvent: (event) => { 
+        onEvent: (event) => {
 
             // these are for grafana
             var timeStamp = parseInt(event.timestamp);
             var msg = event.affectedRows[0].after.con;
-            
+
 
             var jsonObject = parseRadar(msg.toString());
             // pos
@@ -56,7 +56,11 @@ const program = async () => {
             // save to grafana
             // pos
             var sqlPos = 'INSERT INTO pos (pos_x, pos_y, pos_z, time) VALUES (?, ?, ?, ?)';
-            var prmPos = [pos.x, pos.y, pos.z, timeStamp];
+            /*
+                pos x / y / z → 10 cm 단위
+                측정된 값이 k 이면, 실제값은 0.1 * k (m)
+            */
+            var prmPos = [pos.x * 0.1, pos.y * 0.1, pos.z * 0.1, timeStamp];
 
             // bpm
             var sqlBpm = 'INSERT INTO bpm (val, time) VALUES (?, ?)';
@@ -70,13 +74,19 @@ const program = async () => {
             var sqlEng = 'INSERT INTO energy (val, time) VALUES (?, ?)';
             var prmEng = [eng, timeStamp];
 
-            grafanaConn.query(sqlPos, prmPos, (e) => e ? console.log(e) : console.log('insert_pos'));
-            if(bpm !== NaN)
+            // insert into sql
+            if (!isNaN(pos.x) && !isNaN(pos.y) && !isNaN(pos.z)) {
+                grafanaConn.query(sqlPos, prmPos, (e) => e ? console.log(e) : console.log('insert_pos'));
+            }
+            if (!isNaN(bpm)) {
                 grafanaConn.query(sqlBpm, prmBpm, (e) => e ? console.log(e) : console.log('insert_bpm'));
-            if(hbr !== NaN)
+            }
+            if (!isNaN(hbr)) {
                 grafanaConn.query(sqlHbr, prmHbr, (e) => e ? console.log(e) : console.log('insert_hbr'));
-            if(eng !== NaN)
+            }
+            if (!isNaN(eng)) {
                 grafanaConn.query(sqlEng, prmEng, (e) => e ? console.log(e) : console.log('insert_eng'));
+            }
         },
     });
 

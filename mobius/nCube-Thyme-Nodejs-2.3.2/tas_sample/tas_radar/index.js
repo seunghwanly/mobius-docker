@@ -22,7 +22,7 @@ const tasReady = () => {
             socket.setEncoding('hex');
             // to thyme
             var net = require('net');
-            var asClient = net.connect({ port: 3105 });
+            var asClient = net.connect({ port: process.env.ST_PORT });
             // socket를 on data 에 같이 넣어줘서 작업?
             socket.on('data', (data) => tasHandler(data, asClient));
             // end
@@ -33,7 +33,8 @@ const tasReady = () => {
             socket.on('error', (err) => console.error('**ERROR**\n>> : ' + err));
         })
 
-        _server.listen(3333, () => console.info('TCP SERVER listening on :' + ip.address() + ":" + process.env.RS_PORT));
+        // _server.listen(3333, () => console.info('TCP SERVER listening on :' + ip.address() + ":" + process.env.RS_PORT));
+        _server.listen(process.env.RS_PORT, () => console.info('TCP SERVER listening on :' + 'localhost' + ":" + process.env.RS_PORT));
     }
 }
 
