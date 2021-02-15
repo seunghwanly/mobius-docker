@@ -16,7 +16,6 @@
 var net = require('net');
 var ip = require('ip');
 const conf = require('./conf');
-const { parseDataFromRadar } = require('./tas_radar_parse');
 
 var socket_arr = {};
 exports.socket_arr = socket_arr;
