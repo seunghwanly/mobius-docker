@@ -1,5 +1,11 @@
-const express = require('express');
-const app = express();
+const concurrently = require('concurrently');
 
-app.use(express.static('./mobius-2.4.36'));
-app.use(express.static('nCube-Thyme-Nodejs-2.3.2'));
+concurrently([
+    { command: 'brew services start mosquitto', name: 'mosquitto' },
+    { command: 'cd mobius-2.4.36 && node mobius.js', name: 'mobius' },
+    { command: 'cd nCube-Thyme-Nodejs-2.3.2 && node thyme.js', name: 'nCube' },
+], {
+    prefix: 'name',
+    killOthers: ['failure', 'success'],
+    restartTries: 3,
+});

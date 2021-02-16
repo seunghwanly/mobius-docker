@@ -28,9 +28,17 @@ const tasReady = () => {
             // end
             socket.on('end', (data) => console.log('[ socket end with data : ' + JSON.stringify(data) + ']'));
             // close
-            socket.on('close', (hasErr) => hasErr ? console.error('[ socket closed with error ]') : console.info('[ socket closed ]'));
+            socket.on('close', (hasErr) => {
+                if(hasErr) {
+                    console.error('[ socket closed with error ]');
+                } else {
+                    console.info('[ socket closed ]');
+                }
+                // destroy socket
+                socket.destroy();
+            });
             // error
-            socket.on('error', (err) => console.error('**ERROR**\n>> : ' + err));
+            socket.on('error', (err) => throws('**ERROR**\n>> : ' + err));
         })
 
         // _server.listen(3333, () => console.info('TCP SERVER listening on :' + ip.address() + ":" + process.env.RS_PORT));
