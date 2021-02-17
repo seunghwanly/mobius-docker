@@ -10,7 +10,7 @@
     "start": "npm run dev",
     "dev": "concurrently \"npm run listener\" \"npm run tas\"",
     "listener" : "nodemon index.js",
-    "tas": "cd ../nCube-Thyme-Nodejs-2.3.2/tas_sample/tas_radar && nodemon index.js"
+    "tas": "cd ../tas_radar && nodemon index.js"
   },
   "author": "Seunghwan Lee",
   "license": "ISC",

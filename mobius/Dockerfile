@@ -12,11 +12,14 @@ RUN echo "mysql-server mysql-server/root_password password $MYSQL_PWD" | debconf
 RUN echo "mysql-server mysql-server/root_password_again password ${MYSQL_PWD}" | debconf-set-selections
 RUN apt-get -y install mysql-server
 
-# 3. mysql import
+# 3. mysql import - mobiusdb
 COPY . /usr/app
 RUN /etc/init.d/mysql start && sleep 5 && \
     mysql -u root -e "CREATE DATABASE mobiusdb" && \
     mysql -u root mobiusdb < /usr/app/mobius-2.4.36/mobius/mobiusdb.sql
+# mysql import - grafana
+RUN mysql -u root -e "CREATE DATABASE grafana" && \
+    mysql -u root grafana < /usr/app/radar/mysql_radar/grafanadb.sql
 
 # 4. mosquitto 설치
 RUN apt-get install -y software-properties-common && \
