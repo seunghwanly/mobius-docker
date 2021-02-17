@@ -2,6 +2,15 @@
 FROM       ubuntu:16.04
 MAINTAINER seunghwanly@gmail.com
 
+RUN apt-get clean
+
+# sudo 설치
+RUN apt-get update && apt-get install -y sudo && \
+    adduser --disabled-password --gecos "" user \ 
+    && echo 'user:user' | chpasswd \ 
+    && adduser user sudo \ 
+    && echo 'user ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+
 # MySQL
 # 2. mysql 설치
 ENV DEBIAN_FRONTEND noninteractive
@@ -14,13 +23,11 @@ RUN apt-get -y install mysql-server
 
 # 3. mysql import - mobiusdb
 COPY . /usr/app
-RUN /etc/init.d/mysql start && sleep 5 && \
-    mysql -u root -e "CREATE DATABASE mobiusdb" && \
-    mysql -u root mobiusdb < /usr/app/mobius-2.4.36/mobius/mobiusdb.sql
-# mysql import - grafana
-RUN mysql -u root -e "CREATE DATABASE grafana" && \
+RUN sudo /etc/init.d/mysql start && sleep 5 && \
+    mysql -u root -e "CREATE DATABASE mobiusdb; CREATE DATABASE grafana;" && \
+    mysql -u root mobiusdb < /usr/app/mobius-2.4.36/mobius/mobiusdb.sql && \
     mysql -u root grafana < /usr/app/radar/mysql_radar/grafanadb.sql
-
+ 
 # 4. mosquitto 설치
 RUN apt-get install -y software-properties-common && \
     rm -rf /var/lib/apt/lists/*

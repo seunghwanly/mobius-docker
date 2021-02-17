@@ -2,7 +2,7 @@
     Host : localhost / Database : grafana
     Author : github.com/seunghwanly
 */
-SET NAMES utf8 ;
+
 -- Table structure for pos
 DROP TABLE IF EXISTS `pos`;
  SET character_set_client = utf8mb4 ;
