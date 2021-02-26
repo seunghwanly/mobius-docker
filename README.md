@@ -1,7 +1,9 @@
 # 😀 Mobius-docker
 
 ## Guideline in KOREAN
-<a href="https://www.notion.so/Mobius-Guideline-5915345348974cee92933db99104b18f">**Go to Link😀**</a>
+
+[See in **Notion**](https://www.notion.so/Mobius-Guideline-5915345348974cee92933db99104b18f)<br>
+[See in **velog**](https://velog.io/@seunghwanly/series/MobiusGuideline)
 
 <p align="center">
     <a href="#version">Version</a> •
