@@ -1,11 +1,9 @@
 # 😀 Mobius-docker
 
 ## Guideline in KOREAN
-<a href="https://www.notion.so/Mobius-Guideline-5915345348974cee92933db99104b18f">**Go to Link😀**</a>
 
-## Notion
-<em><b>02.03.21 done for parsing</b></em><br/>
-<em><b>TODO : load to Database</b></em>
+[See in **Notion**](https://www.notion.so/Mobius-Guideline-5915345348974cee92933db99104b18f)<br>
+[See in **velog**](https://velog.io/@seunghwanly/series/MobiusGuideline)
 
 <p align="center">
     <a href="#version">Version</a> •
