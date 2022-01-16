@@ -37,10 +37,10 @@ after all, check network again
 ### Check Mysql settings
 - use `mysql` database which is already created when you download MySQL
 - write command below in sequence
-``` bash
+``` sql
 USE mysql;
 ```
-``` bash
+``` sql
 SELECT User, Host, plugin FROM USER;
 ```
 Expected result)
@@ -56,10 +56,10 @@ Expected result)
 ```
 Change `caching_sha2_password` to `mysql_native_password`
 
-``` mysql
+``` sql
 UPDATE USER SET plugin='mysql_native_password' WHERE User='root';
 ```
-``` mysql
+``` sql
 FLUSH PRIVILEGES;
 ```
 
@@ -82,23 +82,23 @@ Access denied for user 'root'@'localhost' (using password: YES)
     mysql -u root
     ```
 3. Make existing password to `null`
-    ``` bash
+    ``` sql
     UPDATE USER SET authentication_string=null WHERE User='root';
     ```
-    ``` mysql
+    ``` sql
     FLUSH PRIVILEGES;
     ```
-    ``` mysql
+    ``` sql
     exit;
     ```
 4. Set new password
     ``` bash
     mysql -u root
     ```
-    ``` mysql
+    ``` sql
     USE USER;
     ```
-    ``` mysql
+    ``` sql
     ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'NEW_PASSWORD!';
     ```
     set same password with `conf.json`
