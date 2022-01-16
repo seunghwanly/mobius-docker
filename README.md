@@ -1,9 +1,112 @@
-# 😀 Mobius-docker
+# 💡 DB Connection Error
 
-## Guideline in KOREAN
+after getting clone from this repository, few might had issue with DB connection with below message.
+``` bash
+[db.connect] No Connection
+```
+For simple issue, the problem would be the password is not able to create a connection pool through nodejs.
 
-[See in **Notion**](https://www.notion.so/Mobius-Guideline-5915345348974cee92933db99104b18f)<br>
-[See in **velog**](https://velog.io/@seunghwanly/series/MobiusGuideline)
+## Checklist
+- [ ] Check if the `mysql` is running, in this repo, the basic code runs at `localhost:3306`
+- [ ] If you are using MacOS and using `homebrew`, don't be confused you might be using both daemon and mysql simultaneously
+- [ ] Check if the `root`'s `plugin` is set to `caching_sha2_password`, update to `mysql_native_password`
+- [ ] Lastly, check `conf.json` file if it is updated properly
+
+### Check Network
+- in MacOS
+``` bash
+netstat -anv | grep LISTEN
+```
+<img width="453" alt="스크린샷 2022-01-16 오후 3 40 41" src="https://user-images.githubusercontent.com/22142225/149650094-63f316d1-5455-435a-81b5-bffc750f02fd.png">
+
+### Check Homebrew(Daemon) and Mysql (only MacOS)
+``` bash
+brew services
+```
+<img width="358" alt="스크린샷 2022-01-16 오후 3 25 18" src="https://user-images.githubusercontent.com/22142225/149649782-c60b5751-e6d2-466f-8a33-c7cbb058fce0.png">
+
+then check if the `MySQL` is running, just stop and restart
+``` bash
+mysql.server stop
+```
+``` bash
+mysql.server start
+```
+after all, check network again
+
+### Check Mysql settings
+- use `mysql` database which is already created when you download MySQL
+- write command below in sequence
+``` bash
+USE mysql;
+```
+``` bash
+SELECT User, Host, plugin FROM USER;
+```
+Expected result)
+``` plain
++------------------+-----------+-----------------------+
+| User             | Host      | plugin                |
++------------------+-----------+-----------------------+
+| mysql.infoschema | localhost | caching_sha2_password |
+| mysql.session    | localhost | caching_sha2_password |
+| mysql.sys        | localhost | caching_sha2_password |
+| root             | localhost | caching_sha2_password |
++------------------+-----------+-----------------------+
+```
+Change `caching_sha2_password` to `mysql_native_password`
+
+``` mysql
+UPDATE USER SET plugin='mysql_native_password' WHERE User='root';
+```
+``` mysql
+FLUSH PRIVILEGES;
+```
+
+Check the results
+<img width="354" alt="스크린샷 2022-01-16 오후 3 33 11" src="https://user-images.githubusercontent.com/22142225/149649933-86c6a5c5-22ea-4dd8-9e7d-162f290d63f1.png">
+
+#### AFTER PROBLEM
+
+when you tried to acces with `mysql -u root -p` and below message occurs, we need to reset the password of root.
+``` plain
+Access denied for user 'root'@'localhost' (using password: YES)
+```
+1. stop the Mysql
+2. get-in with non-login mode
+    ``` bash
+    mysqld_safe --skip-grant-tables &
+    ```
+    then use non-password mode
+    ``` bash
+    mysql -u root
+    ```
+3. Make existing password to `null`
+    ``` bash
+    UPDATE USER SET authentication_string=null WHERE User='root';
+    ```
+    ``` mysql
+    FLUSH PRIVILEGES;
+    ```
+    ``` mysql
+    exit;
+    ```
+4. Set new password
+    ``` bash
+    mysql -u root
+    ```
+    ``` mysql
+    USE USER;
+    ```
+    ``` mysql
+    ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'NEW_PASSWORD!';
+    ```
+    set same password with `conf.json`
+
+<img width="386" alt="스크린샷 2022-01-16 오후 3 42 00" src="https://user-images.githubusercontent.com/22142225/149650126-f260e717-00b3-4312-9e7e-236fc0cd7387.png">
+
+
+---
 
 <p align="center">
     <a href="#version">Version</a> •
@@ -11,6 +114,8 @@
     <a href="#requirements">Requirements</a> •
     <a href="#usage">Usage</a>
 </p>
+
+---
 
 ## Version
 * mobius-2.4.36
@@ -96,3 +201,11 @@ $ npm run dev
     ip : localhost
     port : 3105
     interval : 0(no use) and other
+
+---
+
+
+## Guideline in KOREAN
+
+[See in **Notion**](https://www.notion.so/Mobius-Guideline-5915345348974cee92933db99104b18f)<br>
+[See in **velog**](https://velog.io/@seunghwanly/series/MobiusGuideline)
